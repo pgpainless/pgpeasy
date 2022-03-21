@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2022 Paul Schaub <info@pgpainless.org>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+.idea
+.gradle
+
+out/
+build/
+bin/
+libs/
+
+*.iws
+*.iml
+*.ipr
+*.class
+*.log
+*.jar
+
+gradle.properties
+!gradle-wrapper.jar
+
+.classpath
+.project
+.settings/

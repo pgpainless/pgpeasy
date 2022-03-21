@@ -1,0 +1,29 @@
+plugins {
+    id 'application'
+}
+
+group 'org.pgpainless'
+version '0.1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    // CLI
+    implementation 'info.picocli:picocli:4.6.3'
+
+    // PGPainless
+    implementation "org.pgpainless:pgpainless-core:1.1.2"
+}
+
+application {
+    mainClass = 'org.pgpainless.pgpeasy.PGPeasy'
+}
+
+test {
+    useJUnitPlatform()
+}
