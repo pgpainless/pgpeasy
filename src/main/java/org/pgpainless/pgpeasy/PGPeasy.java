@@ -1,28 +1,55 @@
 package org.pgpainless.pgpeasy;
 
-import org.pgpainless.pgpeasy.commands.Cert;
-import org.pgpainless.pgpeasy.commands.Decrypt;
-import org.pgpainless.pgpeasy.commands.Encrypt;
-import org.pgpainless.pgpeasy.commands.Key;
+import org.pgpainless.cli.PGPainlessCLI;
 import org.pgpainless.pgpeasy.commands.Packet;
-import org.pgpainless.pgpeasy.commands.Sign;
-import org.pgpainless.pgpeasy.commands.Verify;
-import org.pgpainless.pgpeasy.commands.WKD;
 import org.pgpainless.pgpeasy.commands.WOT;
+import org.pgpainless.sop.SOPImpl;
+import pgp.cert_d.cli.PGPCertDCli;
+import pgp.vks.client.cli.VKSCLI;
+import pgp.wkd.cli.WKDCLI;
 import picocli.AutoComplete;
 import picocli.CommandLine;
+import sop.cli.picocli.SopCLI;
+import sop.cli.picocli.commands.ArmorCmd;
+import sop.cli.picocli.commands.DearmorCmd;
+import sop.cli.picocli.commands.DecryptCmd;
+import sop.cli.picocli.commands.DetachInbandSignatureAndMessageCmd;
+import sop.cli.picocli.commands.EncryptCmd;
+import sop.cli.picocli.commands.ExtractCertCmd;
+import sop.cli.picocli.commands.GenerateKeyCmd;
+import sop.cli.picocli.commands.SignCmd;
+import sop.cli.picocli.commands.VerifyCmd;
 
 @CommandLine.Command(
         subcommands = {
-                Encrypt.class,
-                Decrypt.class,
-                Sign.class,
-                Verify.class,
-                Key.class,
-                Cert.class,
-                Packet.class,
-                WKD.class,
+                // Inherit from SOP
+                EncryptCmd.class,
+                DecryptCmd.class,
+                SignCmd.class,
+                VerifyCmd.class,
+                ArmorCmd.class,
+                DearmorCmd.class,
+                ExtractCertCmd.class,
+                GenerateKeyCmd.class,
+                DetachInbandSignatureAndMessageCmd.class,
+
+                // SOP as subcommand
+                SopCLI.class,
+
+                // WKD
+                WKDCLI.class,
+
+                // VKS
+                VKSCLI.class,
+
+                // PGP-Cert-D
+                PGPCertDCli.class,
+
+                // PGPeasy
                 WOT.class,
+                Packet.class,
+
+                // Picocli
                 CommandLine.HelpCommand.class,
                 AutoComplete.GenerateCompletion.class
         }
@@ -30,6 +57,7 @@ import picocli.CommandLine;
 public class PGPeasy {
 
     public static void main(String[] args) {
+        SopCLI.setSopInstance(new SOPImpl());
         int exitCode = execute(args);
         if (exitCode != 0) {
             System.exit(exitCode);
@@ -37,10 +65,13 @@ public class PGPeasy {
     }
 
     public static int execute(String[] args) {
-        return new CommandLine(PGPeasy.class)
+        CommandLine cmd = new CommandLine(PGPeasy.class);
+        // Hide generate-completion command
+        CommandLine gen = cmd.getSubcommands().get("generate-completion");
+        gen.getCommandSpec().usageMessage().hidden(true);
+
+        return cmd
                 .setCommandName("pgpeasy")
-                // .setExecutionExceptionHandler(new SOPExecutionExceptionHandler())
-                // .setExitCodeExceptionMapper(new SOPExceptionExitCodeMapper())
                 .setCaseInsensitiveEnumValuesAllowed(true)
                 .execute(args);
     }

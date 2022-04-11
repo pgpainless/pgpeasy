@@ -5,19 +5,27 @@ plugins {
 group 'org.pgpainless'
 version '0.1.0-SNAPSHOT'
 
+apply from: 'version.gradle'
+
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 
     // CLI
-    implementation 'info.picocli:picocli:4.6.3'
+    implementation "info.picocli:picocli:$picocliVersion"
 
-    // PGPainless
-    implementation "org.pgpainless:pgpainless-core:1.1.2"
+    implementation "org.pgpainless:pgpainless-cli:$pgpainlessVersion"
+    implementation "org.pgpainless:sop-java-picocli:$sopJavaVersion"
+    implementation ("org.pgpainless:wkd-java-cli:$wkdVersion") {
+        exclude group:'rg.slf4j', module:'slf4j-nop'
+    }
+    implementation "org.pgpainless:vks-java-cli:$vksVersion"
+    implementation "org.pgpainless:pgpainless-cert-d-cli:$certDPgpainlessVersion"
 }
 
 application {
