@@ -8,10 +8,13 @@ SPDX-License-Identifier: Apache-2.0
 PGPeasy is intended to become your next OpenPGP multi-tool.
 It provides an easy interface for all sorts of operations, such as generating and discovering keys, encrypting and decrypting messages, managing certificates...
 
+## Why another CLI?
 Contrary to `pgpainless-cli`, this application is not limited to the SOP specification, so it is possible to extend it with additional behavior and more powerful features.
 
 A good example for a feature that will get added at some point is support for password protected keys.
 
+## Usage
+The application aims to be pretty self-explanatory. If you are not about a certain subcommand, just execute `pgpeasy help <subcommand>`.
 ```shell
 $ pgpeasy help
 Usage: pgpeasy [COMMAND]
@@ -35,10 +38,9 @@ Commands:
   wot                       Interact with the Web of Trust
   help                      Displays help information about the
                               specified command
-
 ```
 
-## Building Instructions
+## Build Instructions
 
 Clone the repository and execute `gradle build` in the project directory.
 Afterwards you can find archives containing the application in the `build/distributions/` directory.
