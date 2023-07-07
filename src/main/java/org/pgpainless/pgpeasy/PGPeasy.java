@@ -1,9 +1,7 @@
 package org.pgpainless.pgpeasy;
 
-import org.pgpainless.cli.PGPainlessCLI;
 import org.pgpainless.pgpeasy.commands.Packet;
 import org.pgpainless.pgpeasy.commands.WOT;
-import org.pgpainless.sop.SOPImpl;
 import pgp.cert_d.cli.PGPCertDCli;
 import pgp.vks.client.cli.VKSCLI;
 import pgp.wkd.cli.WKDCLI;
@@ -13,10 +11,12 @@ import sop.cli.picocli.SopCLI;
 import sop.cli.picocli.commands.ArmorCmd;
 import sop.cli.picocli.commands.DearmorCmd;
 import sop.cli.picocli.commands.DecryptCmd;
-import sop.cli.picocli.commands.DetachInbandSignatureAndMessageCmd;
 import sop.cli.picocli.commands.EncryptCmd;
 import sop.cli.picocli.commands.ExtractCertCmd;
 import sop.cli.picocli.commands.GenerateKeyCmd;
+import sop.cli.picocli.commands.InlineDetachCmd;
+import sop.cli.picocli.commands.InlineSignCmd;
+import sop.cli.picocli.commands.InlineVerifyCmd;
 import sop.cli.picocli.commands.SignCmd;
 import sop.cli.picocli.commands.VerifyCmd;
 
@@ -26,12 +26,14 @@ import sop.cli.picocli.commands.VerifyCmd;
                 EncryptCmd.class,
                 DecryptCmd.class,
                 SignCmd.class,
+                InlineSignCmd.class,
                 VerifyCmd.class,
+                InlineVerifyCmd.class,
                 ArmorCmd.class,
                 DearmorCmd.class,
                 ExtractCertCmd.class,
                 GenerateKeyCmd.class,
-                DetachInbandSignatureAndMessageCmd.class,
+                InlineDetachCmd.class,
 
                 // SOP as subcommand
                 SopCLI.class,
@@ -56,8 +58,16 @@ import sop.cli.picocli.commands.VerifyCmd;
 )
 public class PGPeasy {
 
+    static {
+        // Call static block of PGPainlessCLI
+        try {
+            Class.forName("org.pgpainless.cli.PGPainlessCLI");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
-        SopCLI.setSopInstance(new SOPImpl());
         int exitCode = execute(args);
         if (exitCode != 0) {
             System.exit(exitCode);

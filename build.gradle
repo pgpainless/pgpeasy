@@ -19,7 +19,11 @@ dependencies {
     // CLI
     implementation "info.picocli:picocli:$picocliVersion"
 
-    implementation "org.pgpainless:pgpainless-cli:$pgpainlessVersion"
+    implementation ("org.pgpainless:pgpainless-cli:$pgpainlessVersion") {
+        exclude group:'rg.slf4j', module:'slf4j-nop'
+        exclude group:'ch.qos.logback', module:'logback-core'
+        exclude group:'ch.qos.logback', module:'logback-classic'
+    }
     implementation "org.pgpainless:sop-java-picocli:$sopJavaVersion"
     implementation ("org.pgpainless:wkd-java-cli:$wkdVersion") {
         exclude group:'rg.slf4j', module:'slf4j-nop'
